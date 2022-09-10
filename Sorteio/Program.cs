@@ -159,16 +159,25 @@ namespace Sorteio
                     var loteria = mySqlData.GetString(2);
                     var data = Convert.ToDateTime(mySqlData.GetString(3));
                     var results = new resultadoFinal(id, extracao, loteria, data);
+                    Console.WriteLine(id);
+                    Console.WriteLine(extracao);
+                    Console.WriteLine(loteria);
+                    Console.WriteLine(data);
                     var result1 = Convert.ToInt32(mySqlData.GetString(6));
+                    Console.WriteLine(mySqlData.GetString(6));
                     var result2 = Convert.ToInt32(mySqlData.GetString(11));
+                    Console.WriteLine(mySqlData.GetString(11));
                     var result3 = Convert.ToInt32(mySqlData.GetString(16));
+                    Console.WriteLine(mySqlData.GetString(16));
                     var result4 = Convert.ToInt32(mySqlData.GetString(21));
+                    Console.WriteLine(mySqlData.GetString(21));
                     var result5 = Convert.ToInt32(mySqlData.GetString(26));
+                    Console.WriteLine(mySqlData.GetString(26));
                     results.sorteios = new List<int>() { result1, result2, result3, result4, result5 };
                     resultadosLoteria[id] = results;
                 }
             }
-
+            Console.WriteLine("\n FIM da BUSCA \n");
             return resultadosLoteria;
         }
 
