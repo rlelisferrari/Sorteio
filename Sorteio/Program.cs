@@ -27,6 +27,24 @@ namespace Sorteio
         {
             var mConn = new MySqlConnection($" Persist Security Info=False;server={servidor};database={database};uid={usuario};server = {servidor}; database = {database}; uid = {usuario}; pwd = {senha}");
 
+            //primeiro deletar os dados da tabela
+            try
+            {
+                mConn.Open();
+                var sqlCommandDel = "delete from combinacoes";
+                var command = new MySqlCommand(sqlCommandDel, mConn);
+                command.ExecuteReader();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message.ToString());
+            }
+            finally
+            {
+                mConn.Close();
+            }
+
+            //Inserir novos itens
             foreach (var item in resultados)
             {
                 try
@@ -159,15 +177,12 @@ namespace Sorteio
                     var loteria = mySqlData.GetString(2);
                     var data = Convert.ToDateTime(mySqlData.GetString(3));
                     var results = new resultadoFinal(id, extracao, loteria, data);
-                    Console.WriteLine(id);
-                    Console.WriteLine(extracao);
-                    Console.WriteLine(loteria);
-                    Console.WriteLine(data);
                     var result1 = Convert.ToInt32(mySqlData.GetString(6));
                     var result2 = Convert.ToInt32(mySqlData.GetString(11));
                     var result3 = Convert.ToInt32(mySqlData.GetString(16));
                     var result4 = Convert.ToInt32(mySqlData.GetString(21));
-                    var result5 = Convert.ToInt32(mySqlData.GetString(26));
+                    var x = mySqlData.GetString(26);
+                    var result5 = Convert.ToInt32(x);
                     results.sorteios = new List<int>() { result1, result2, result3, result4, result5 };
                     resultadosLoteria[id] = results;
                 }
@@ -175,6 +190,7 @@ namespace Sorteio
             Console.WriteLine("\n FIM da BUSCA \n");
 
             Console.WriteLine($"Foram lidos {resultadosLoteria.Count} itens");
+            Console.WriteLine("Pressione uma tecla p/ continuar");
             Console.ReadLine();
             return resultadosLoteria;
         }
