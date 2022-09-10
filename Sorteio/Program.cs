@@ -11,7 +11,7 @@ namespace Sorteio
         static private string servidor = "localhost";
         static private string database = "loteria_lotep";
         static private string usuario = "root";
-        static private string senha = "root123";
+        static private string senha = "";
 
         static void Main(string[] args)
         {
