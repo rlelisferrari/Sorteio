@@ -1,0 +1,1 @@
+SELECT `id_loteria`, `resultado1_loteria`, `resultado2_loteria`, `resultado3_loteria`,`resultado4_loteria`,`resultado5_loteria`,`resultado6_loteria`,`resultado7_loteria`,`resultado8_loteria`,`resultado9_loteria`,`resultado10_loteria` FROM `resultados` WHERE 1;
