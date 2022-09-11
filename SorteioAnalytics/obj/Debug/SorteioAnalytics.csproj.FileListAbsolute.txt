@@ -32,3 +32,11 @@ C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\obj\Debug\SorteioA
 C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\obj\Debug\SorteioAnalytics.csproj.CopyComplete
 C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\obj\Debug\SorteioAnalytics.exe
 C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\obj\Debug\SorteioAnalytics.pdb
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\obj\Debug\SorteioAnalytics.Interface_2.resources
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\bin\Debug\EPPlus.dll
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\bin\Debug\EPPlus.Interfaces.dll
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\bin\Debug\EPPlus.System.Drawing.dll
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\bin\Debug\EPPlus.xml
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\SorteioAnalytics\obj\Debug\SorteioAnalytics.csproj.AssemblyReference.cache
