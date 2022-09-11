@@ -8,7 +8,7 @@ namespace Sorteio
         public int id_loteria;
         public string extracao_loteria;
         public string loteria_loteria;
-        public DateTime data_loteria;
+        public string data_loteria;
         public List<int> sorteios;
         public string comb1;
         public string comb2;
@@ -26,7 +26,7 @@ namespace Sorteio
             id_loteria = id;
             extracao_loteria = extracao;
             loteria_loteria = loteria;
-            data_loteria = data;
+            data_loteria =  $"{data.Year}/{data.Month}/{data.Day}";
             sorteios = new List<int>();
         }
     }

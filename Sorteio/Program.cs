@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 
 namespace Sorteio
 {
@@ -15,10 +16,13 @@ namespace Sorteio
 
         static void Main(string[] args)
         {
-            var resultados = BuscaSorteios();          
+            Projeto1();
+        }
 
+        public static void Projeto1()
+        {
+            var resultados = BuscaSorteios();
             EscreveBanco(resultados);
-
             Console.WriteLine("FINALIZADO!!!");
             Console.ReadLine();
         }
@@ -26,7 +30,7 @@ namespace Sorteio
         private static void EscreveBanco(Dictionary<int, resultadoFinal> resultados)
         {
             var mConn = new MySqlConnection($" Persist Security Info=False;server={servidor};database={database};uid={usuario};server = {servidor}; database = {database}; uid = {usuario}; pwd = {senha}");
-
+            Console.WriteLine("Inicia escrita das combinações");
             //primeiro deletar os dados da tabela
             try
             {
@@ -53,7 +57,7 @@ namespace Sorteio
 
                     if (mConn.State == ConnectionState.Open)
                     {
-                        var comb = ObterCombinacoes(item.Value);
+                        var comb = CalculaCombinacoes(item.Value);
                         var sqlCommand = "INSERT INTO `combinacoes`(`extracao_loteria`, `loteria_loteria`, `data_loteria`, `resultado1_loteria`, `resultado2_loteria`, `resultado3_loteria`, `resultado4_loteria`, `resultado5_loteria`," +
                         "`combinacao1`, `combinacao2`, `combinacao3`, `combinacao4`, `combinacao5`, `combinacao6`, `combinacao7`, `combinacao8`, `combinacao9`, `combinacao10`)" +
                         $" VALUES ('{item.Value.extracao_loteria}', '{item.Value.loteria_loteria}','{item.Value.data_loteria}'," +
@@ -84,18 +88,18 @@ namespace Sorteio
             }
         }
 
-        public static List<List<string>> ObterCombinacoes(resultadoFinal sorteio)
+        public static List<List<string>> CalculaCombinacoes(resultadoFinal sorteio)
         {
-            Console.WriteLine($"\nSorteio {sorteio.id_loteria} | Extração: {sorteio.extracao_loteria} | loteria: {sorteio.loteria_loteria}");
-            Console.WriteLine($"Data {sorteio.data_loteria.ToString("dd/MM/yyyy")}");
-            Console.WriteLine($"Resultados:");
-            Console.WriteLine($"{sorteio.sorteios[0]}");
-            Console.WriteLine($"{sorteio.sorteios[1]}");
-            Console.WriteLine($"{sorteio.sorteios[2]}");
-            Console.WriteLine($"{sorteio.sorteios[3]}");
-            Console.WriteLine($"{sorteio.sorteios[4]}");
+            //Console.WriteLine($"\nSorteio {sorteio.id_loteria} | Extração: {sorteio.extracao_loteria} | loteria: {sorteio.loteria_loteria}");
+            //Console.WriteLine($"Data {sorteio.data_loteria.ToString("dd/MM/yyyy")}");
+            //Console.WriteLine($"Resultados:");
+            //Console.WriteLine($"{sorteio.sorteios[0]}");
+            //Console.WriteLine($"{sorteio.sorteios[1]}");
+            //Console.WriteLine($"{sorteio.sorteios[2]}");
+            //Console.WriteLine($"{sorteio.sorteios[3]}");
+            //Console.WriteLine($"{sorteio.sorteios[4]}");
 
-            Console.WriteLine($"\nAs dezenas dos sorteios são:");
+            //Console.WriteLine($"\nAs dezenas dos sorteios são:");
 
             var sorteioDezenas = new List<string>();
             foreach (var item in sorteio.sorteios)
@@ -103,10 +107,10 @@ namespace Sorteio
                 var dezena = item % 100;
                 var dezenaTxt = dezena >= 10 ? dezena.ToString() : "0"+dezena ;
                 sorteioDezenas.Add(dezenaTxt);
-                Console.WriteLine(dezenaTxt);
+                //Console.WriteLine(dezenaTxt);
             }
 
-            Console.WriteLine("\nAs possíveis combinações são:");
+            //Console.WriteLine("\nAs possíveis combinações são:");
             var comb1 = new List<string> { sorteioDezenas[0], sorteioDezenas[1], sorteioDezenas[2] };
             var comb2 = new List<string> { sorteioDezenas[0], sorteioDezenas[1], sorteioDezenas[3] };
             var comb3 = new List<string> { sorteioDezenas[0], sorteioDezenas[1], sorteioDezenas[4] };
@@ -142,12 +146,12 @@ namespace Sorteio
                 comb10};
 
             var j = 1;
-            foreach (var item in combinacoes53)
-            {
-                Console.WriteLine($"combinação {j} : {item[0]}x{item[1]}x{item[2]}");
+            //foreach (var item in combinacoes53)
+            //{
+            //    Console.WriteLine($"combinação {j} : {item[0]}x{item[1]}x{item[2]}");
                 
-                j++;
-            }
+            //    j++;
+            //}
 
             return combinacoes53;
         }
@@ -193,7 +197,7 @@ namespace Sorteio
             Console.WriteLine("Pressione uma tecla p/ continuar");
             Console.ReadLine();
             return resultadosLoteria;
-        }
+        }        
 
         public static List<int> GetSorteios(string nomeArquivo)
         {
@@ -207,7 +211,7 @@ namespace Sorteio
             }
 
             return sorteios;
-        }
+        }        
 
         public static void EscreveArquivo(List<List<int>> combinacoes, string nomeArquivo)
         {

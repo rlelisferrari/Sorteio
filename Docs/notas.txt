@@ -1,1 +1,13 @@
-SELECT `id_loteria`, `resultado1_loteria`, `resultado2_loteria`, `resultado3_loteria`,`resultado4_loteria`,`resultado5_loteria`,`resultado6_loteria`,`resultado7_loteria`,`resultado8_loteria`,`resultado9_loteria`,`resultado10_loteria` FROM `resultados` WHERE 1;
+Blz
+
+Vou precisar fazer um estudo de estatística, tipo:
+quais a combinações que mais se repete para uma determinada extração_loteria em um determinado período;
+Filtros da pesquisa: extração; período;
+Deve retornar: quantidade de extrações do período; as 10 combinações que mais repetiram; na frente da combinação a quantidade de vezes que ela repetiu no período;
+Vc consegue adicionar o valor dessa pesquisa por aqui ou tem outra forma?
+
+
+
+and data_loteria > '01/09/2022'
+and data_loteria < '31/09/2022'
+order by data_loteria DESC

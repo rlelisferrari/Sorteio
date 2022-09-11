@@ -6,13 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.30" />
+    <None Remove="Arquivos\Sorteios.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Arquivos\Sorteios.txt">
+    <Content Include="Arquivos\Sorteios.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.30" />
   </ItemGroup>
 
 </Project>
