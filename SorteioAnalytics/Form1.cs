@@ -73,8 +73,9 @@ namespace SorteioAnalytics
             }
             if (mConn.State == ConnectionState.Open)
             {
-                var sqlCommand = $"SELECT * FROM combinacoes WHERE extracao_loteria = '{filtro.Item1}' and data_loteria BETWEEN '{filtro.Item2}' and  '{filtro.Item3}'";
-                var command = new MySqlCommand(sqlCommand, mConn);
+                var sqlCommandSemFiltroExtr = $"SELECT * FROM combinacoes WHERE data_loteria BETWEEN '{filtro.Item2}' and  '{filtro.Item3}'";
+                var sqlCommandCompleto = $"SELECT * FROM combinacoes WHERE extracao_loteria = '{filtro.Item1}' and data_loteria BETWEEN '{filtro.Item2}' and  '{filtro.Item3}'";
+                var command = new MySqlCommand(ckbFiltroExt.Checked ? sqlCommandCompleto : sqlCommandSemFiltroExtr, mConn);
                 var mySqlData = command.ExecuteReader();
 
                 if (!mySqlData.HasRows)
@@ -102,10 +103,13 @@ namespace SorteioAnalytics
                 var relDezOrd = relatorioDez.OrderByDescending(it => it.Value).ToList();
                 var relCentOrd = relatorioCent.OrderByDescending(it => it.Value).ToList();
                 Relatorios.Add(new RelatorioCombinacoes(combinacoes, relCombOrd, relDezOrd, relCentOrd));
-                var nomeArquivo = $"relatorio_{filtro.Item1.Replace(":", "_")}_{filtro.Item2.Replace("/", "_")}_{filtro.Item3.Replace("/", "_")}";
+                var nomeFiltro1 = ckbFiltroExt.Checked ? filtro.Item1.Replace(":", "_") : "Todas";
+                var nomeArquivo = $"relatorio_{nomeFiltro1}_{filtro.Item2.Replace("/", "_")}_{filtro.Item3.Replace("/", "_")}";
                 RelatorioTxt(filtro, nomeArquivo + ".txt");
                 RelatorioExcel(nomeArquivo + ".xlsx");
-                MessageBox.Show(msgSaida, "Relatório Combinações", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var CurrentDirectory = Directory.GetCurrentDirectory();
+                var fullPath = CurrentDirectory + $"\\Arquivos\\{nomeArquivo}";
+                MessageBox.Show("Relatórios na pasta " + fullPath, "Relatório Combinações", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             mConn.Close();
@@ -149,7 +153,8 @@ namespace SorteioAnalytics
 
             using (StreamWriter writer = new StreamWriter(fullPath))
             {
-                writer.WriteLine($"Loteria: {filtro.Item1} DataInício: {filtro.Item2} DataFim: {filtro.Item3}");
+                var nomeExtr = !ckbFiltroExt.Checked ? "Todas" : filtro.Item1;
+                writer.WriteLine($"Loteria: {nomeExtr} DataInício: {filtro.Item2} DataFim: {filtro.Item3}");
                 writer.WriteLine($"Total de Extrações: {totalExtracoes}\n");
                 int i = 0;
                 writer.WriteLine($"Ranking de Combinações");
@@ -195,7 +200,7 @@ namespace SorteioAnalytics
 
             foreach (var relatorio in Relatorios)
             {
-                var nomeLoteria = relatorio.Combinacao.FirstOrDefault().extracao_loteria.Replace(":","_");
+                var nomeLoteria = !ckbFiltroExt.Checked ? "Todas" : relatorio.Combinacao.FirstOrDefault().extracao_loteria.Replace(":","_");
                 CriarPlanilha(excel, nomeLoteria);
 
                 var workSheet = excel.Workbook.Worksheets[nomeLoteria];

@@ -34,11 +34,12 @@ namespace SorteioAnalytics
             this.lblNomeLoteria = new System.Windows.Forms.Label();
             this.lblDataInicio = new System.Windows.Forms.Label();
             this.lblDataFim = new System.Windows.Forms.Label();
+            this.ckbFiltroExt = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(56, 107);
+            this.button1.Location = new System.Drawing.Point(62, 107);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(166, 31);
             this.button1.TabIndex = 0;
@@ -59,11 +60,11 @@ namespace SorteioAnalytics
             // lblNomeLoteria
             // 
             this.lblNomeLoteria.AutoSize = true;
-            this.lblNomeLoteria.Location = new System.Drawing.Point(93, 12);
+            this.lblNomeLoteria.Location = new System.Drawing.Point(110, 12);
             this.lblNomeLoteria.Name = "lblNomeLoteria";
-            this.lblNomeLoteria.Size = new System.Drawing.Size(85, 13);
+            this.lblNomeLoteria.Size = new System.Drawing.Size(95, 13);
             this.lblNomeLoteria.TabIndex = 2;
-            this.lblNomeLoteria.Text = "Nome da Loteria";
+            this.lblNomeLoteria.Text = "Nome da Extração";
             // 
             // lblDataInicio
             // 
@@ -83,18 +84,30 @@ namespace SorteioAnalytics
             this.lblDataFim.TabIndex = 4;
             this.lblDataFim.Text = "Data Fim";
             // 
+            // ckbFiltroExt
+            // 
+            this.ckbFiltroExt.AutoSize = true;
+            this.ckbFiltroExt.Checked = true;
+            this.ckbFiltroExt.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckbFiltroExt.Location = new System.Drawing.Point(93, 12);
+            this.ckbFiltroExt.Name = "ckbFiltroExt";
+            this.ckbFiltroExt.Size = new System.Drawing.Size(15, 14);
+            this.ckbFiltroExt.TabIndex = 5;
+            this.ckbFiltroExt.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(273, 143);
+            this.ClientSize = new System.Drawing.Size(292, 143);
+            this.Controls.Add(this.ckbFiltroExt);
             this.Controls.Add(this.lblDataFim);
             this.Controls.Add(this.lblDataInicio);
             this.Controls.Add(this.lblNomeLoteria);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Relatório Extrações";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -107,6 +120,7 @@ namespace SorteioAnalytics
         private System.Windows.Forms.Label lblNomeLoteria;
         private System.Windows.Forms.Label lblDataInicio;
         private System.Windows.Forms.Label lblDataFim;
+        private System.Windows.Forms.CheckBox ckbFiltroExt;
     }
 }
 
