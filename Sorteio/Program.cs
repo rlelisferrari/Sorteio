@@ -9,6 +9,7 @@ namespace Sorteio
 {
     class Program
     {
+        //iniciar interface 2.0
         static private string servidor = "localhost";
         static private string database = "loteria_lotep";
         static private string usuario = "root";
