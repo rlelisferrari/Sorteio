@@ -8,6 +8,7 @@ namespace SorteioAnalytics.Modelos
         public string extracao_loteria;
         public string loteria_loteria;
         public string data_loteria;
+        public List<int> sorteios;
         public string comb1;
         public string comb2;
         public string comb3;

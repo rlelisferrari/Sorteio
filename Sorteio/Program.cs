@@ -132,7 +132,7 @@ namespace Sorteio
             sorteio.comb7 = $"{ sorteioDezenas[1]} x {sorteioDezenas[2]} x {sorteioDezenas[3]}";
             sorteio.comb8 = $"{ sorteioDezenas[1]} x {sorteioDezenas[2]} x {sorteioDezenas[4]}";
             sorteio.comb9 = $"{ sorteioDezenas[1]} x {sorteioDezenas[3]} x {sorteioDezenas[4]}";
-            sorteio.comb10 = $"{ sorteioDezenas[1]} x {sorteioDezenas[3]} x {sorteioDezenas[4]}";
+            sorteio.comb10 = $"{ sorteioDezenas[2]} x {sorteioDezenas[3]} x {sorteioDezenas[4]}";
 
             var combinacoes53 = new List<List<string>>() {
                 comb1 ,

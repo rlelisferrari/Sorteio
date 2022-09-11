@@ -4,18 +4,17 @@ namespace SorteioAnalytics.Modelos
 {
     public class RelatorioCombinacoes
     {
-        public List<KeyValuePair<string, int>> RankingCombinacoes;
         public List<Combinacao> Combinacao;
+        public List<KeyValuePair<string, int>> RankingCombinacoes;
+        public List<KeyValuePair<string, int>> RankingDezenas;
+        public List<KeyValuePair<string, int>> RankingCentenas;        
 
-        public RelatorioCombinacoes(List<Combinacao> combinacoes)
-        {
-            Combinacao = new List<Combinacao>();
-        }
-
-        public RelatorioCombinacoes(List<Combinacao> combinacoes, List<KeyValuePair<string, int>> ranking)
+        public RelatorioCombinacoes(List<Combinacao> combinacoes, List<KeyValuePair<string, int>> rankingComb, List<KeyValuePair<string, int>> rankingDezenas, List<KeyValuePair<string, int>> rankingCentenas)
         {
             Combinacao = combinacoes;
-            RankingCombinacoes = ranking;
+            RankingCombinacoes = rankingComb;
+            RankingDezenas = rankingDezenas;
+            RankingCentenas = rankingCentenas;
         }
     }
 }
