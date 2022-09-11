@@ -61,6 +61,7 @@ namespace SorteioAnalytics
             var relatorioComb = new Dictionary<string, int>();
             var relatorioDez = new Dictionary<string, int>();
             var relatorioCent = new Dictionary<string, int>();
+            var relatorioMilha = new Dictionary<string, int>();
             var mConn = new MySqlConnection($" Persist Security Info=False;server={servidor};database={database};uid={usuario};server = {servidor}; database = {database}; uid = {usuario}; pwd = {senha}");
             try
             {
@@ -94,7 +95,7 @@ namespace SorteioAnalytics
                     combinacao.extracao_loteria = mySqlData.GetString(1);
                     combinacao.loteria_loteria = mySqlData.GetString(2);
                     combinacao.data_loteria = mySqlData.GetString(3);
-                    RankingDezCent(mySqlData, relatorioDez, relatorioCent);
+                    RankingDezCentMilha(mySqlData, relatorioDez, relatorioCent, relatorioMilha);
                     RankingCombinacoes(mySqlData, relatorioComb);
                     combinacoes.Add(combinacao);
                 }
@@ -102,7 +103,8 @@ namespace SorteioAnalytics
                 var relCombOrd = relatorioComb.OrderByDescending(it => it.Value).ToList();
                 var relDezOrd = relatorioDez.OrderByDescending(it => it.Value).ToList();
                 var relCentOrd = relatorioCent.OrderByDescending(it => it.Value).ToList();
-                Relatorios.Add(new RelatorioCombinacoes(combinacoes, relCombOrd, relDezOrd, relCentOrd));
+                var relMilhaOrd = relatorioMilha.OrderByDescending(it => it.Value).ToList();
+                Relatorios.Add(new RelatorioCombinacoes(combinacoes, relCombOrd, relDezOrd, relCentOrd, relMilhaOrd));
                 var nomeFiltro1 = ckbFiltroExt.Checked ? filtro.Item1.Replace(":", "_") : "Todas";
                 var nomeArquivo = $"relatorio_{nomeFiltro1}_{filtro.Item2.Replace("/", "_")}_{filtro.Item3.Replace("/", "_")}";
                 RelatorioTxt(filtro, nomeArquivo + ".txt");
@@ -119,12 +121,23 @@ namespace SorteioAnalytics
 
         public string Numero2Digitos(int numero)
         {
-            return numero >= 10 ? numero.ToString() : $"0{numero}";
+            return numero < 10 ? $"0{numero}" : numero.ToString();
         }
 
         public string Numero3Digitos(int numero)
         {
-            return numero >= 100 ? numero.ToString() : $"0{numero}";
+            var result = numero < 100 ? $"0{numero}" : numero.ToString();
+            result = numero < 10 ? $"00{numero}" : result;
+            return result;
+        }
+
+        public string Numero4Digitos(int numero)
+        {
+            var result = numero < 1000 ? $"0{numero}" : numero.ToString();
+            result = numero < 100 ? $"00{numero}" : result;
+            result = numero < 10 ? $"000{numero}" : result;
+            
+            return result;
         }
 
         public Tuple<string, string, string> AtualizarFiltro()
@@ -150,42 +163,32 @@ namespace SorteioAnalytics
             var rankingComp = Relatorios[0].RankingCombinacoes;
             var rankingDez = Relatorios[0].RankingDezenas;
             var rankingCent = Relatorios[0].RankingCentenas;
+            var rankingMilh = Relatorios[0].RankingMilhares;
 
             using (StreamWriter writer = new StreamWriter(fullPath))
             {
                 var nomeExtr = !ckbFiltroExt.Checked ? "Todas" : filtro.Item1;
                 writer.WriteLine($"Loteria: {nomeExtr} DataInício: {filtro.Item2} DataFim: {filtro.Item3}");
                 writer.WriteLine($"Total de Extrações: {totalExtracoes}\n");
-                int i = 0;
-                writer.WriteLine($"Ranking de Combinações");
-                foreach (var item in rankingComp)
-                {
-                    if (i > 9)
-                        break;
-                    writer.WriteLine($"{item.Key} -> {item.Value}");
-                    i++;
-                }
-
-                i = 0;
-                writer.WriteLine($"\nRanking de Dezenas");
-                foreach (var item in rankingDez)
-                {
-                    if (i > 9)
-                        break;
-                    writer.WriteLine($"{item.Key} -> {item.Value}");
-                    i++;
-                }
-
-                i = 0;
-                writer.WriteLine($"\nRanking de Centenas");
-                foreach (var item in rankingCent)
-                {
-                    if (i > 9)
-                        break;
-                    writer.WriteLine($"{item.Key} -> {item.Value}");
-                    i++;
-                }
+                InsereTxt(rankingComp, writer, "Ranking de Combinações");
+                InsereTxt(rankingDez, writer, "Ranking de Dezenas");
+                InsereTxt(rankingCent, writer, "Ranking de Centenas");
+                InsereTxt(rankingMilh, writer, "Ranking de Milhares");                    
             }
+        }
+
+        public void InsereTxt(List<KeyValuePair<string,int>> rankingComp, StreamWriter writer, string nomeRanking)
+        {
+            int i = 0;
+            writer.WriteLine(nomeRanking);
+            foreach (var item in rankingComp)
+            {
+                if (i > 9)
+                    break;
+                writer.WriteLine($"{item.Key} -> {item.Value}");
+                i++;
+            }
+            writer.WriteLine();
         }
 
         public void RelatorioExcel(string nomeArquivo)
@@ -219,6 +222,7 @@ namespace SorteioAnalytics
                 InserePlanilha(workSheet, relatorio.RankingCombinacoes, "Combinação", 1);
                 InserePlanilha(workSheet, relatorio.RankingDezenas, "Dezenas", 4);
                 InserePlanilha(workSheet, relatorio.RankingCentenas, "Centenas", 7);              
+                InserePlanilha(workSheet, relatorio.RankingMilhares, "Milhares", 10);              
 
                 // Ajusta o tamanho da coluna
                 workSheet.Column(1).AutoFit();
@@ -229,6 +233,8 @@ namespace SorteioAnalytics
                 workSheet.Column(6).AutoFit();
                 workSheet.Column(7).AutoFit();
                 workSheet.Column(8).AutoFit();
+                workSheet.Column(9).AutoFit();
+                workSheet.Column(10).AutoFit();
             }
 
             var fullPathExcel = Directory.GetCurrentDirectory() + $"\\Arquivos\\{nomeArquivo}";
@@ -298,15 +304,17 @@ namespace SorteioAnalytics
             return msgSaida;
         }
 
-        public void RankingDezCent(MySqlDataReader mySqlData, Dictionary<string, int> relatorioDez, Dictionary<string, int> relatorioCent)
+        public void RankingDezCentMilha(MySqlDataReader mySqlData, Dictionary<string, int> relatorioDez, Dictionary<string, int> relatorioCent, Dictionary<string, int> relatorioMilha)
         {
             for (int i = 4; i < 9; i++)
             {
-                var numSorteio = Convert.ToInt32(mySqlData.GetString(i));
-                var dezena = numSorteio % 100;
-                var centena = numSorteio % 1000;
+                var sorteio = Convert.ToInt32(mySqlData.GetString(i));
+                var dezena = sorteio % 100;
+                var centena = sorteio % 1000;
+                var milhar = sorteio % 10000;
                 var keyDez = Numero2Digitos(dezena);
                 var keyCent = Numero3Digitos(centena);
+                var keyMilha = Numero4Digitos(milhar);
                 if (relatorioDez.ContainsKey(keyDez))
                     relatorioDez[keyDez] += 1;
                 else
@@ -316,6 +324,11 @@ namespace SorteioAnalytics
                     relatorioCent[keyCent] += 1;
                 else
                     relatorioCent[keyCent] = 1;
+
+                if (relatorioMilha.ContainsKey(keyMilha))
+                    relatorioMilha[keyMilha] += 1;
+                else         
+                    relatorioMilha[keyMilha] = 1;
             }
         }
 
