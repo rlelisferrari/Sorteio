@@ -25,18 +25,44 @@ namespace SorteioAnalytics
         public Form1()
         {
             InitializeComponent();
-            AtualizarFiltro();
+            AlimentarCombobox();
+        }
+
+        private void AlimentarCombobox()
+        {
+            var mConn = new MySqlConnection($" Persist Security Info=False;server={servidor};database={database};uid={usuario};server = {servidor}; database = {database}; uid = {usuario}; pwd = {senha}");
+
+            try
+            {
+                mConn.Open();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message.ToString());
+                MessageBox.Show("Erro ao tentar alimentar o combobox de extrações", "Erro Conexão Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (mConn.State == ConnectionState.Open)
+            {
+                var sqlCommand = $"SELECT Distinct extracao_loteria FROM combinacoes";
+                var command = new MySqlCommand(sqlCommand, mConn);
+                var mySqlData = command.ExecuteReader();
+
+                while (mySqlData.Read())
+                {
+                    var nomeExtracao = mySqlData.GetString(0);
+                    cbExtracoes.Items.Add(nomeExtracao);
+                }
+
+                cbExtracoes.SelectedIndex = 0;
+            }                
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var filtro = AtualizarFiltro(); ;
+            var dataInicio = $"{calendarInicio.Value.Year}/{calendarInicio.Value.Month}/{calendarInicio.Value.Day}";
+            var dataFim = $"{calendarFim.Value.Year}/{calendarFim.Value.Month}/{calendarFim.Value.Day}";
+            var filtro = new Tuple<string, string, string>(cbExtracoes.SelectedItem.ToString(), dataInicio, dataFim);
             BuscaCombinacoes(filtro);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            AtualizarFiltro();
         }
 
         public Tuple<string, string, string> GetFiltroRelatorio(string nomeArquivo)
@@ -81,8 +107,7 @@ namespace SorteioAnalytics
 
                 if (!mySqlData.HasRows)
                 {
-                    Console.WriteLine($"A loteria {filtro.Item1} não possui registro no período entre {filtro.Item2} e {filtro.Item3}");
-                    msgSaida = $"A loteria {filtro.Item1} não possui registro no período entre {filtro.Item2} e {filtro.Item3}";
+                    msgSaida = $"A loteria {filtro.Item1} não possui registro no período entre {calendarInicio.Value.ToShortDateString()} e {calendarFim.Value.ToShortDateString()}";
                     MessageBox.Show(msgSaida,"Sem Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -106,8 +131,8 @@ namespace SorteioAnalytics
                 var relMilhaOrd = relatorioMilha.OrderByDescending(it => it.Value).ToList();
                 Relatorios.Add(new RelatorioCombinacoes(combinacoes, relCombOrd, relDezOrd, relCentOrd, relMilhaOrd));
                 var nomeFiltro1 = ckbFiltroExt.Checked ? filtro.Item1.Replace(":", "_") : "Todas";
-                var nomeArquivo = $"relatorio_{nomeFiltro1}_{filtro.Item2.Replace("/", "_")}_{filtro.Item3.Replace("/", "_")}";
-                RelatorioTxt(filtro, nomeArquivo + ".txt");
+                var nomeArquivo = $"relatorio_{nomeFiltro1}_{calendarInicio.Value.ToShortDateString().Replace("/", "_")}_{calendarFim.Value.ToShortDateString().Replace("/", "_")}";
+                RelatorioTxt(nomeArquivo + ".txt");
                 RelatorioExcel(nomeArquivo + ".xlsx");
                 var CurrentDirectory = Directory.GetCurrentDirectory();
                 var fullPath = CurrentDirectory + $"\\Arquivos\\{nomeArquivo}";
@@ -140,17 +165,17 @@ namespace SorteioAnalytics
             return result;
         }
 
-        public Tuple<string, string, string> AtualizarFiltro()
-        {
-            var filtro = GetFiltroRelatorio("Filtros.txt");
-            lblNomeLoteria.Text = NomeLoteria + filtro.Item1;
-            lblDataInicio.Text = DataInicio + filtro.Item2;
-            lblDataFim.Text = DataFim + filtro.Item3;
+        //public Tuple<string, string, string> AtualizarFiltro()
+        //{
+        //    var filtro = GetFiltroRelatorio("Filtros.txt");
+        //    lblNomeLoteria.Text = NomeLoteria + filtro.Item1;
+        //    lblDataInicio.Text = DataInicio + filtro.Item2;
+        //    lblDataFim.Text = DataFim + filtro.Item3;
 
-            return filtro;
-        }
+        //    return filtro;
+        //}
 
-        public void RelatorioTxt(Tuple<string,string,string> filtro, string nomeArquivo)
+        public void RelatorioTxt(string nomeArquivo)
         {
             var CurrentDirectory = Directory.GetCurrentDirectory();
             var fullPath = CurrentDirectory + $"\\Arquivos\\{nomeArquivo}";
@@ -159,6 +184,7 @@ namespace SorteioAnalytics
             FileStream objFileStrm = File.Create(fullPath);
             objFileStrm.Close();
 
+            var nomeExtracoes = Relatorios[0].Combinacao.FirstOrDefault().extracao_loteria;
             var totalExtracoes = Relatorios[0].Combinacao.Count();
             var rankingComp = Relatorios[0].RankingCombinacoes;
             var rankingDez = Relatorios[0].RankingDezenas;
@@ -167,8 +193,8 @@ namespace SorteioAnalytics
 
             using (StreamWriter writer = new StreamWriter(fullPath))
             {
-                var nomeExtr = !ckbFiltroExt.Checked ? "Todas" : filtro.Item1;
-                writer.WriteLine($"Loteria: {nomeExtr} DataInício: {filtro.Item2} DataFim: {filtro.Item3}");
+                var nomeExtr = !ckbFiltroExt.Checked ? "Todas" : nomeExtracoes;
+                writer.WriteLine($"Loteria: {nomeExtr} DataInício: {calendarInicio.Value.ToShortDateString()} DataFim: {calendarFim.Value.ToShortDateString()}");
                 writer.WriteLine($"Total de Extrações: {totalExtracoes}\n");
                 InsereTxt(rankingComp, writer, "Ranking de Combinações");
                 InsereTxt(rankingDez, writer, "Ranking de Dezenas");
@@ -203,6 +229,7 @@ namespace SorteioAnalytics
 
             foreach (var relatorio in Relatorios)
             {
+                var nomeLoteriaOriginal = !ckbFiltroExt.Checked ? "Todas" : relatorio.Combinacao.FirstOrDefault().extracao_loteria;
                 var nomeLoteria = !ckbFiltroExt.Checked ? "Todas" : relatorio.Combinacao.FirstOrDefault().extracao_loteria.Replace(":","_");
                 CriarPlanilha(excel, nomeLoteria);
 
@@ -213,9 +240,9 @@ namespace SorteioAnalytics
                 workSheet.Cells[1, 3].Value = "Data de Fim";
                 workSheet.Cells[1, 4].Value = "Quantidade de Registros";
 
-                workSheet.Cells[2, 1].Value = nomeLoteria;
-                workSheet.Cells[2, 2].Value = lblDataInicio.Text.Replace(DataInicio, "");
-                workSheet.Cells[2, 3].Value = lblDataFim.Text.Replace(DataFim, "");
+                workSheet.Cells[2, 1].Value = nomeLoteriaOriginal;
+                workSheet.Cells[2, 2].Value = calendarInicio.Value.ToShortDateString();
+                workSheet.Cells[2, 3].Value = calendarFim.Value.ToShortDateString();
                 workSheet.Cells[2, 4].Value = relatorio.Combinacao.Count();
 
                 // Define o cabeçalho da planilha(base 1)
@@ -345,6 +372,10 @@ namespace SorteioAnalytics
                 else
                     relatorioComb[key] = 1;
             }
+        }
+
+        private void cbExtracoes_SelectedIndexChanged(object sender, EventArgs e)
+        {
         }
     }
 }

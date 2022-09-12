@@ -71,4 +71,3 @@ C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\Sorteio\obj\Debug\net5.0\Sorteio.dl
 C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\Sorteio\obj\Debug\net5.0\ref\Sorteio.dll
 C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\Sorteio\obj\Debug\net5.0\Sorteio.pdb
 C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\Sorteio\obj\Debug\net5.0\Sorteio.genruntimeconfig.cache
-C:\Users\rleli\Desktop\Teste\Projeto_Sorteio\Sorteio\obj\Debug\net5.0\Sorteio.csproj.AssemblyReference.cache

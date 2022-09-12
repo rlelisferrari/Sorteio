@@ -30,16 +30,15 @@ namespace SorteioAnalytics
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.lblNomeLoteria = new System.Windows.Forms.Label();
-            this.lblDataInicio = new System.Windows.Forms.Label();
-            this.lblDataFim = new System.Windows.Forms.Label();
             this.ckbFiltroExt = new System.Windows.Forms.CheckBox();
+            this.cbExtracoes = new System.Windows.Forms.ComboBox();
+            this.calendarInicio = new System.Windows.Forms.DateTimePicker();
+            this.calendarFim = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(62, 107);
+            this.button1.Location = new System.Drawing.Point(281, 69);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(166, 31);
             this.button1.TabIndex = 0;
@@ -47,64 +46,50 @@ namespace SorteioAnalytics
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(12, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 81);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Mostrar Filtro";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // lblNomeLoteria
-            // 
-            this.lblNomeLoteria.AutoSize = true;
-            this.lblNomeLoteria.Location = new System.Drawing.Point(110, 12);
-            this.lblNomeLoteria.Name = "lblNomeLoteria";
-            this.lblNomeLoteria.Size = new System.Drawing.Size(95, 13);
-            this.lblNomeLoteria.TabIndex = 2;
-            this.lblNomeLoteria.Text = "Nome da Extração";
-            // 
-            // lblDataInicio
-            // 
-            this.lblDataInicio.AutoSize = true;
-            this.lblDataInicio.Location = new System.Drawing.Point(93, 44);
-            this.lblDataInicio.Name = "lblDataInicio";
-            this.lblDataInicio.Size = new System.Drawing.Size(60, 13);
-            this.lblDataInicio.TabIndex = 3;
-            this.lblDataInicio.Text = "Data Início";
-            // 
-            // lblDataFim
-            // 
-            this.lblDataFim.AutoSize = true;
-            this.lblDataFim.Location = new System.Drawing.Point(93, 75);
-            this.lblDataFim.Name = "lblDataFim";
-            this.lblDataFim.Size = new System.Drawing.Size(49, 13);
-            this.lblDataFim.TabIndex = 4;
-            this.lblDataFim.Text = "Data Fim";
-            // 
             // ckbFiltroExt
             // 
             this.ckbFiltroExt.AutoSize = true;
             this.ckbFiltroExt.Checked = true;
             this.ckbFiltroExt.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckbFiltroExt.Location = new System.Drawing.Point(93, 12);
+            this.ckbFiltroExt.Location = new System.Drawing.Point(144, 12);
             this.ckbFiltroExt.Name = "ckbFiltroExt";
-            this.ckbFiltroExt.Size = new System.Drawing.Size(15, 14);
+            this.ckbFiltroExt.Size = new System.Drawing.Size(127, 17);
             this.ckbFiltroExt.TabIndex = 5;
+            this.ckbFiltroExt.Text = "Utilizar Filtro Extração";
             this.ckbFiltroExt.UseVisualStyleBackColor = true;
+            // 
+            // cbExtracoes
+            // 
+            this.cbExtracoes.FormattingEnabled = true;
+            this.cbExtracoes.Location = new System.Drawing.Point(12, 9);
+            this.cbExtracoes.Name = "cbExtracoes";
+            this.cbExtracoes.Size = new System.Drawing.Size(121, 21);
+            this.cbExtracoes.TabIndex = 6;
+            this.cbExtracoes.SelectedIndexChanged += new System.EventHandler(this.cbExtracoes_SelectedIndexChanged);
+            // 
+            // calendarInicio
+            // 
+            this.calendarInicio.Location = new System.Drawing.Point(12, 45);
+            this.calendarInicio.Name = "calendarInicio";
+            this.calendarInicio.Size = new System.Drawing.Size(245, 20);
+            this.calendarInicio.TabIndex = 9;
+            // 
+            // calendarFim
+            // 
+            this.calendarFim.Location = new System.Drawing.Point(12, 80);
+            this.calendarFim.Name = "calendarFim";
+            this.calendarFim.Size = new System.Drawing.Size(245, 20);
+            this.calendarFim.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 143);
+            this.ClientSize = new System.Drawing.Size(458, 118);
+            this.Controls.Add(this.calendarFim);
+            this.Controls.Add(this.calendarInicio);
+            this.Controls.Add(this.cbExtracoes);
             this.Controls.Add(this.ckbFiltroExt);
-            this.Controls.Add(this.lblDataFim);
-            this.Controls.Add(this.lblDataInicio);
-            this.Controls.Add(this.lblNomeLoteria);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Relatório Extrações";
@@ -116,11 +101,10 @@ namespace SorteioAnalytics
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label lblNomeLoteria;
-        private System.Windows.Forms.Label lblDataInicio;
-        private System.Windows.Forms.Label lblDataFim;
         private System.Windows.Forms.CheckBox ckbFiltroExt;
+        private System.Windows.Forms.ComboBox cbExtracoes;
+        private System.Windows.Forms.DateTimePicker calendarInicio;
+        private System.Windows.Forms.DateTimePicker calendarFim;
     }
 }
 
